@@ -9,27 +9,12 @@ import ddddocr
 import requests
 from lxml import etree
 
-'''读取命令行'''
-if len(sys.argv) != 3 or len(sys.argv[1]) != 6:
-    print("usage: {} <username> <password> <longitude> <latitude> <address>".format(sys.argv[0]))
-    sys.exit(1)
-if len(sys.argv) >= 3:
-    USERNAME = sys.argv[1]
-    PASSWORD = sys.argv[2]
-if len(sys.argv) == 6:
-    LONGITUDE = sys.argv[3]
-    LATITUDE = sys.argv[4]
-    ADDRESS = sys.argv[5]
-
-
-'''--------------------------------------------------'''
-
 '''  ##########！！！配置信息！！！(务必修改)########## '''
-USERNAME = USERNAME or ""  # 本地打卡更改or后面就行
-PASSWORD = PASSWORD or ""  # 本地打卡更改or后面就行
+USERNAME = ""  # 本地打卡更改or后面就行
+PASSWORD = ""  # 本地打卡更改or后面就行
 # 学校拼音简写命名变量，真的会谢
 checkin_data = {
-    "JZDXXDZ": ADDRESS or "详细地址",  # 目前居住地详细地址 本地打卡更改ot后面就行
+    "JZDXXDZ": "详细地址",  # 目前居住地详细地址 本地打卡更改ot后面就行
     "JZDYQFXDJ": "其他",  # 目前居住地风险等级  可选参数:其他|低风险|中风险|高风险
     "SFYZGFXDQLJS": "无",  # 7天内是否有中高风险地区旅居史  可选参数:无|有
     "SFJCZGFXDQLJSRY": "无",  # 7天内是否接触中高风险地区旅居史人员  可选参数:无|有
@@ -40,10 +25,23 @@ checkin_data = {
     "TZRYSFYC": "否",  # 同住人员是否有以上情况异常 可选参数:否|是|无同住人员
     "YKMYS": "绿色",  # 渝康码颜色   绿色|黄色|红色|其他
     "QTSM": "",  # 其他说明, 可选参数:空|说明字符串
-    "LONGITUDE": LONGITUDE or "",  # 打卡经度 本地打卡更改ot后面就行
-    "LATITUDE": LATITUDE or "",  # 打卡维度   本地打卡更改or后面就行
+    "LONGITUDE": "",  # 打卡经度 本地打卡更改ot后面就行
+    "LATITUDE": "",  # 打卡维度   本地打卡更改or后面就行
 }
 '''  ###########################  '''
+
+'''读取命令行'''
+if len(sys.argv) != 3 and len(sys.argv) != 6 and len(sys.argv) != 1:
+    print("usage: {} <username> <password> <longitude> <latitude> <address>".format(sys.argv[0]))
+    sys.exit(1)
+if len(sys.argv) >= 3:
+    USERNAME = sys.argv[1]
+    PASSWORD = sys.argv[2]
+if len(sys.argv) == 6:
+    checkin_data['LONGITUDE'] = sys.argv[3]
+    checkin_data['LATITUDE'] = sys.argv[4]
+    checkin_data['JZDXXDZ'] = sys.argv[5]
+'''--------------------------------------------------'''
 
 if checkin_data['LONGITUDE'] == "" or checkin_data['LATITUDE'] == "":
     print("请输入经纬度,或者保证代码中已填写经纬度")
