@@ -16,7 +16,6 @@ LONGITUDE = sys.argv[3]
 LATITUDE = sys.argv[4]
 ADDRESS = sys.argv[5]
 
-
 '''--------------------------------------------------'''
 
 '''  ##########！！！配置信息！！！(务必修改)########## '''
@@ -44,7 +43,7 @@ if checkin_data['LONGITUDE'] == "" or checkin_data['LATITUDE'] == "":
     print("请输入经纬度,或者保证代码中已填写经纬度")
     sys.exit(1)
 
-if checkin_data['JZDXXDZ'] == "详细地址" or checkin_data['JZDXXDZ'] == "" :
+if checkin_data['JZDXXDZ'] == "详细地址" or checkin_data['JZDXXDZ'] == "":
     print("请输入详细地址,或者保证代码中已填写详细地址")
     sys.exit(1)
 
@@ -363,8 +362,8 @@ def do_checkin(session: requests.Session, address, _today_data):
         "LOCATIONBIG": address[1],
         "LOCATIONSMALL": address[0],
         "SFTS": "是",
-        "SFTQX": "是",   # 是否同区县，即你所填地址的所在区县与微信地图api获取到你所在区县是否相同
-        "SFDK": "是",    # 是否打卡，那必然是
+        "SFTQX": "是",  # 是否同区县，即你所填地址的所在区县与微信地图api获取到你所在区县是否相同
+        "SFDK": "是",  # 是否打卡，那必然是
         "WID": _today_data['WID']}
     )
     print("开始提交打卡数据")
@@ -393,7 +392,7 @@ _session = ""
 is_need_captcha = False
 
 while current_try_times < try_times:
-    print("第{}尝试登录".format(current_try_times + 1))
+    print("第{}次尝试登录".format(current_try_times + 1))
     _session = requests.session()
     result, location = login_ids(session=_session, _is_need_captcha=is_need_captcha)
     if result == 0:
@@ -426,7 +425,7 @@ current_try_times = 0  # 重置尝试次数
 try_times = 3  # 允许尝试次数
 
 while current_try_times < try_times:
-    print("第{}尝试获取MOD_AUTH_CAS".format(current_try_times + 1))
+    print("第{}次尝试获取MOD_AUTH_CAS".format(current_try_times + 1))
     temp_session = _session  # 防止错误的session环境，影响下一次尝试
     result = get_MOD_AUTH_CAS(location, session=temp_session)
     if result == 0:
@@ -445,7 +444,7 @@ current_try_times = 0  # 重置尝试次数
 try_times = 3  # 允许尝试次数\
 
 while current_try_times < try_times:
-    print("第{}尝试获取appInfo".format(current_try_times + 1))
+    print("第{}次尝试获取appInfo".format(current_try_times + 1))
     temp_session = _session  # 防止错误的session环境，影响下一次尝试
     result = get_APP_info(session=temp_session)
     if result == 0:
@@ -464,7 +463,7 @@ current_try_times = 0  # 重置尝试次数
 try_times = 3  # 允许尝试次数
 
 while current_try_times < try_times:
-    print("第{}尝试获取final_WEU".format(current_try_times + 1))
+    print("第{}次尝试获取final_WEU".format(current_try_times + 1))
     temp_session = _session  # 防止错误的session环境，影响下一次尝试
     result = get_final_WEU(session=temp_session)
     if result == 0:
@@ -484,7 +483,7 @@ try_times = 3  # 允许尝试次数
 today_data = ""
 
 while current_try_times < try_times:
-    print("第{}尝试获取今日打卡信息".format(current_try_times + 1))
+    print("第{}次尝试获取今日打卡信息".format(current_try_times + 1))
     temp_session = _session  # 防止错误的session环境，影响下一次尝试
     result, today_data = get_today_info(session=temp_session)
     if result == 0:
@@ -493,7 +492,7 @@ while current_try_times < try_times:
         break
     elif result == 1:
         print("今日已打卡,不再打卡,脚本退出")
-        sys.exit(1)
+        sys.exit(0)
     elif result == 2:
         print("成功请求学校服务器,但是学校服务器返回确实空空如也。")
         print("此情况大多数是由于您打卡时间过早，以至于学校服务器还未生成今日打卡信息，建议更换打卡的时间至白天。")
@@ -507,14 +506,14 @@ if current_try_times >= try_times:
     print("到达最大尝试次数，脚本退出")
     sys.exit(1)
 
-print(today_data)
+# print(today_data)
 
 current_try_times = 0  # 重置尝试次数
 try_times = 3  # 允许尝试次数
 address = ()
 
 while current_try_times < try_times:
-    print("第{}尝试解析经纬度信息".format(current_try_times + 1))
+    print("第{}次尝试解析经纬度信息".format(current_try_times + 1))
     temp_session = _session  # 防止错误的session环境，影响下一次尝试
     result, address = get_information_from_tencent_map(session=temp_session, latitude=checkin_data['LATITUDE'],
                                                        longitude=checkin_data['LONGITUDE'])
@@ -534,7 +533,7 @@ current_try_times = 0  # 重置尝试次数
 try_times = 3  # 允许尝试次数
 
 while current_try_times < try_times:
-    print("第{}尝试提交打卡数据".format(current_try_times + 1))
+    print("第{}次尝试提交打卡数据".format(current_try_times + 1))
     temp_session = _session  # 防止错误的session环境，影响下一次尝试
     result = do_checkin(session=temp_session, address=address, _today_data=today_data)
     if result == 0:
