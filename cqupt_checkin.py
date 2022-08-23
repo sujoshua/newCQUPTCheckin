@@ -424,7 +424,7 @@ if current_try_times >= try_times:
     print("到达最大尝试次数，脚本退出")
     sys.exit(1)
 
-print(location)
+#print(location)
 
 current_try_times = 0  # 重置尝试次数
 try_times = 3  # 允许尝试次数
