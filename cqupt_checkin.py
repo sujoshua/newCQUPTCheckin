@@ -60,8 +60,8 @@ if PASSWORD == "":
     sys.exit(1)
 
 # 经纬度随机扰动
-checkin_data['LONGITUDE'] = str(float(checkin_data["LONGITUDE"]) + random.randint(-4, 4))
-checkin_data['LATITUDE'] = str(float(checkin_data["LATITUDE"]) + random.randint(-4, 4))
+checkin_data['LONGITUDE'] = str(round(float(checkin_data["LONGITUDE"]) + 0.0001*random.randint(-4, 4),4))
+checkin_data['LATITUDE'] = str(round(float(checkin_data["LATITUDE"]) + 0.0001*random.randint(-4, 4),4))
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -331,25 +331,26 @@ def get_information_from_tencent_map(session: requests.Session, latitude, longit
 
 # 根据提交打卡数据判断是否有异常
 def is_abnormal():
-    if checkin_data['JZDYQFXDJ'] != '低风险':
-        return True
+    if checkin_data['JZDYQFXDJ'] != '低风险' and checkin_data['JZDYQFXDJ'] != '其他':
+        return '是'
     if checkin_data['SFYZGFXDQLJS'] != '无':
-        return True
+        return '是'
     if checkin_data['SFJCZGFXDQLJSRY'] != '无':
-        return True
+        return '是'
     if checkin_data['SZDJSSFYYQFS'] != '否':
-        return True
+        return '是'
     if checkin_data['JZDSFFXQHLSGKQY'] != '否':
-        return True
+        return '是'
     if checkin_data['TWSFZC'] != '是':
-        return True
+        return '是'
     if checkin_data['SFYGRZZ'] != '否':
-        return True
+        return '是'
     if checkin_data['TZRYSFYC'] != '否':
-        return True
+        return '是'
     if checkin_data['YKMYS'] != '绿色':
-        return True
-    return False
+        return '是'
+    return '否'
+
 
 
 # 开始打卡
