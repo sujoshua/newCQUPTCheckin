@@ -4,6 +4,8 @@ import datetime
 import random
 import sys
 import time
+
+import pytz
 from Crypto.Cipher import AES
 import ddddocr
 import requests
@@ -272,7 +274,7 @@ def get_today_info(session: requests.Session):
     url = "http://ehall.cqupt.edu.cn/publicapp/sys/cyxsjkdk/modules/yddjk/T_XSJKDK_XSTBXX_QUERY.do"
     form_data = {
         "TYRZM": USERNAME,
-        "RQ": datetime.datetime.now().strftime("%Y-%m-%d"),
+        "RQ": datetime.datetime.now(tz=pytz.timezone('Asia/Shanghai')).strftime("%Y-%m-%d"),
         "pageNumber": "1",
     }
     try:
@@ -361,8 +363,8 @@ def do_checkin(session: requests.Session, address, _today_data):
         "XH": _today_data['XH'],
         "XM": _today_data['XM'],
         "MQJZD": address[2],
-        "DKSJ": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "RQ": datetime.datetime.now().strftime("%Y-%m-%d"),
+        "DKSJ": datetime.datetime.now(tz=pytz.timezone('Asia/Shanghai')).strftime("%Y-%m-%d %H:%M:%S"),
+        "RQ": datetime.datetime.now(tz=pytz.timezone('Asia/Shanghai')).strftime("%Y-%m-%d"),
         "SFYC": is_abnormal(),
         "LOCATIONBIG": address[1],
         "LOCATIONSMALL": address[0],
