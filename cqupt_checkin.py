@@ -363,7 +363,7 @@ def do_checkin(session: requests.Session, address, _today_data):
         "XH": _today_data['XH'],
         "XM": _today_data['XM'],
         "MQJZD": address[2],
-        "DKSJ": datetime.datetime.now(tz=datetime.timezone.).strftime("%Y-%m-%d %H:%M:%S"),
+        "DKSJ": datetime.datetime.now(tz=pytz.timezone('Asia/Shanghai')).strftime("%Y-%m-%d %H:%M:%S"),
         "RQ": datetime.datetime.now(tz=pytz.timezone('Asia/Shanghai')).strftime("%Y-%m-%d"),
         "SFYC": is_abnormal(),
         "LOCATIONBIG": address[1],
