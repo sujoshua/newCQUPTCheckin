@@ -11,14 +11,29 @@ jobs:
   build:
     name: do_checkin
     runs-on: ubuntu-latest
+    env: 
+      USERNAME: ${{secrets.USERNAME}}
+      PASSWORD: ${{secrets.PASSWORD}}
+      JZDXXDZ: ${{secrets.JZDXXDZ}}
+      LONGITUDE: ${{secrets.LONGITUDE}}
+      LATITUDE: ${{secrets.LATITUDE}}
     steps:
       - name: Check out code
         uses: actions/checkout@v3
-      
+      - name: Export Env
+        run: |
+          if [[ "${{secrets.NOTIFICATIONTYPES}}" != "" ]];then   echo "NOTIFICATIONTYPES=${{secrets.NOTIFICATIONTYPES}}" >> $GITHUB_ENV;  fi
+          if [[ "${{secrets.PUSHPLUSTOKEN}}" != "" ]];then   echo "PUSHPLUSTOKEN=${{secrets.PUSHPLUSTOKEN}}" >> $GITHUB_ENV; fi
+          if [[ "${{secrets.PUSHPLUSTOPIC}}" != "" ]];then   echo "PUSHPLUSTOPIC=${{secrets.PUSHPLUSTOPIC}}" >> $GITHUB_ENV; fi
+          if [[ "${{secrets.PUSHPLUSTCHANNEL}}" != "" ]];then   echo "PUSHPLUSTCHANNEL=${{secrets.PUSHPLUSTCHANNEL}}" >> $GITHUB_ENV; fi
+          if [[ "${{secrets.TELEGRAMBOTTOKEN}}" != "" ]];then   echo "TELEGRAMBOTTOKEN=${{secrets.TELEGRAMBOTTOKEN}}" >> $GITHUB_ENV; fi
+          if [[ "${{secrets.TELEGRAMBOTCHATID}}" != "" ]];then   echo "TELEGRAMBOTCHATID=${{secrets.TELEGRAMBOTCHATID}}" >> $GITHUB_ENV; fi
+          if [[ "${{secrets.WXPUSHERTOKEN}}" != "" ]];then   echo "WXPUSHERTOKEN=${{secrets.WXPUSHERTOKEN}}" >> $GITHUB_ENV; fi
+          if [[ "${{secrets.WXPUSHERUIDS}}" != "" ]];then   echo "WXPUSHERUIDS=${{secrets.WXPUSHERUIDS}}" >> $GITHUB_ENV; fi
+          if [[ "${{secrets.WXPUSHERTOPICIDS}}" != "" ]];then   "WXPUSHERTOPICIDS=echo ${{secrets.WXPUSHERTOPICIDS}}" >> $GITHUB_ENV; fi
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-    
       - name: run
-        run: python3 cqupt_checkin.py ${{secrets.USERNAME}} ${{secrets.PASSWORD}} ${{secrets.LONGITUDE}} ${{secrets.LATITUDE}} ${{secrets.ADDRESS}} 
+        run: python3 cqupt_checkin.py 
