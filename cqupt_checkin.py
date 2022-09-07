@@ -47,7 +47,7 @@ push_plus_channel = ""  # 推送渠道，选填，不填默认为微信；可选
 
 # telegram_bot推送
 telegram_bot_token = ""  # telegram_bot推送token，必填
-telegram_bot_chat_id = ""  # telegram_bot推送给的用户id
+telegram_bot_chat_id = ""  # telegram_bot推送给的用户id,必填
 
 '''  ##############################以下脚本运行代码，不动勿动##############################  '''
 '''读取环境变量'''
@@ -595,7 +595,7 @@ def main():
 '''-----------------------------通知推送函数----------------------------------'''
 
 
-# WxPusher推送,文档: https://wxpusher.zjiecode.com/docs/#/
+# WxPusher推送,文档: https://wxpusher.zjiecode.com/docs/#/?id=%e5%8f%91%e9%80%81%e6%b6%88%e6%81%af-1
 def wx_pusher(title, content):
     if wx_pusher_token == "":
         print("未配置wx_pusher_token,跳过推送")
@@ -625,7 +625,7 @@ def wx_pusher(title, content):
     return
 
 
-# telegram bot, 文档: https://core.telegram.org/bots/api
+# telegram bot, 文档: https://core.telegram.org/bots/api#sendmessage
 def telegram_bot(title, content):
     if telegram_bot_token == "":
         print("telegram_bot_token为空，跳过telegram_bot推送")
