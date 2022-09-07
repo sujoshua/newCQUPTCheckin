@@ -20,6 +20,7 @@ PASSWORD = ""  # 本地打卡更改or后面就行
 checkin_data = {
     "JZDXXDZ": "详细地址",  # 目前居住地详细地址 本地打卡更改ot后面就行
     "JZDYQFXDJ": "其他",  # 目前居住地风险等级  可选参数:其他|低风险|中风险|高风险
+    "SFXN": "是",         # 是否在校内    可选参数:是|否
     "SFYZGFXDQLJS": "无",  # 7天内是否有中高风险地区旅居史  可选参数:无|有
     "SFJCZGFXDQLJSRY": "无",  # 7天内是否接触中高风险地区旅居史人员  可选参数:无|有
     "SZDJSSFYYQFS": "否",  # 7天内所在地级市是否有本土疫情发生 可选参数:否|是
@@ -29,8 +30,8 @@ checkin_data = {
     "TZRYSFYC": "否",  # 同住人员是否有以上情况异常 可选参数:否|是|无同住人员
     "YKMYS": "绿色",  # 渝康码颜色   绿色|黄色|红色|其他
     "QTSM": "",  # 其他说明, 可选参数:空|说明字符串
-    "LONGITUDE": "",  # 打卡经度
-    "LATITUDE": "",  # 打卡维度
+    "LONGITUDE": "1",  # 打卡经度
+    "LATITUDE": "1",  # 打卡维度
 }
 '''  ####################！！！通知信息配置！！！(按需修改，具体参照Readme)########## '''
 # 通知方式
@@ -47,9 +48,9 @@ push_plus_channel = ""  # 推送渠道，选填，不填默认为微信；可选
 
 # telegram_bot推送
 telegram_bot_token = ""  # telegram_bot推送token，必填
-telegram_bot_chat_id = ""  # telegram_bot推送给的用户id
+telegram_bot_chat_id = ""  # telegram_bot推送给的用户id,必填
 
-'''  ##############################以下脚本运行代码，不动勿动##############################  '''
+'''  ##############################以下脚本运行代码，不懂勿动##############################  '''
 '''读取环境变量'''
 
 if "USERNAME" in os.environ:
@@ -58,6 +59,8 @@ if "PASSWORD" in os.environ:
     PASSWORD = os.environ["PASSWORD"]
 if "JZDXXDZ" in os.environ:
     checkin_data["JZDXXDZ"] = os.environ["JZDXXDZ"]
+if "SFXN" in os.environ:
+    checkin_data["SFXN"] = os.environ["SFXN"]
 if "LONGITUDE" in os.environ:
     checkin_data["LONGITUDE"] = os.environ["LONGITUDE"]
 if "LATITUDE" in os.environ:
@@ -118,7 +121,7 @@ def handle_captcha(session: requests.Session):
     # 获取二维码图片
     def get_captcha():
         print("开始获取验证码")
-        captcha_url = "https://ids.cqupt.edu.cn/authserver/getCaptcha.htl?1661054554115".format(int(time.time() * 1000))
+        captcha_url = "https://ids.cqupt.edu.cn/authserver/getCaptcha.htl?{}".format(int(time.time() * 1000))
         try:
             res = session.get(captcha_url, headers=headers)
         except Exception as e:
@@ -463,7 +466,7 @@ def main():
         print("到达最大尝试次数，脚本退出")
         raise Exception("验证码尝试次数到达最大尝试次数，脚本退出")
 
-    print(location)
+    # print(location)
 
     current_try_times = 0  # 重置尝试次数
     try_times = 3  # 允许尝试次数
@@ -550,7 +553,7 @@ def main():
         print("到达最大尝试次数，脚本退出")
         raise Exception("获取今日打卡信息尝试次数到达最大尝试次数，脚本退出")
 
-    print(today_data)
+    # print(today_data)
 
     current_try_times = 0  # 重置尝试次数
     try_times = 3  # 允许尝试次数
@@ -595,7 +598,7 @@ def main():
 '''-----------------------------通知推送函数----------------------------------'''
 
 
-# WxPusher推送,文档: https://wxpusher.zjiecode.com/docs/#/
+# WxPusher推送,文档: https://wxpusher.zjiecode.com/docs/#/?id=%e5%8f%91%e9%80%81%e6%b6%88%e6%81%af-1
 def wx_pusher(title, content):
     if wx_pusher_token == "":
         print("未配置wx_pusher_token,跳过推送")
@@ -607,10 +610,10 @@ def wx_pusher(title, content):
         "summary": title,
     }
 
-    if wx_pusher_topic_ids.length > 0:
+    if wx_pusher_topic_ids!=[]:
         data["topicIds"] = wx_pusher_topic_ids
 
-    if wx_pusher_uids.length > 0:
+    if wx_pusher_uids.length!=[]:
         data["uids"] = wx_pusher_uids
 
     try:
@@ -625,7 +628,7 @@ def wx_pusher(title, content):
     return
 
 
-# telegram bot, 文档: https://core.telegram.org/bots/api
+# telegram bot, 文档: https://core.telegram.org/bots/api#sendmessage
 def telegram_bot(title, content):
     if telegram_bot_token == "":
         print("telegram_bot_token为空，跳过telegram_bot推送")
