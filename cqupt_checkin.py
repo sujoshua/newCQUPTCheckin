@@ -463,7 +463,7 @@ def main():
         print("到达最大尝试次数，脚本退出")
         raise Exception("验证码尝试次数到达最大尝试次数，脚本退出")
 
-    print(location)
+    # print(location)
 
     current_try_times = 0  # 重置尝试次数
     try_times = 3  # 允许尝试次数
@@ -550,7 +550,7 @@ def main():
         print("到达最大尝试次数，脚本退出")
         raise Exception("获取今日打卡信息尝试次数到达最大尝试次数，脚本退出")
 
-    print(today_data)
+    # print(today_data)
 
     current_try_times = 0  # 重置尝试次数
     try_times = 3  # 允许尝试次数
