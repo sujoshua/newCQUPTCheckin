@@ -386,7 +386,7 @@ def is_abnormal():
         return '是'
     if checkin_data['TWSFZC'] != '是':
         return '是'
-    if checkin_data['SFYGRZZ'] != '否':
+    if checkin_data['SFYGRZZ'] != '无':
         return '是'
     if checkin_data['TZRYSFYC'] != '否':
         return '是'
